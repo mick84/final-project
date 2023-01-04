@@ -37,9 +37,12 @@ export default function BoughtCarPage(props) {
     changeInput(target, setInputs);
   };
   const clearInputs = () => setInputs(() => initialInputs);
+  const [file, setFile] = useState(null);
+  const changeFile = (e) => setFile(e.target.files[0]);
   const submitForm = async (e) => {
     try {
       e.preventDefault();
+
       const {
         sellerPassportID,
         sellerPhone,
@@ -51,6 +54,19 @@ export default function BoughtCarPage(props) {
         licensePlate,
         ownershipDate,
       } = inputs;
+      const formdata = new FormData();
+      formdata.append("name", `${licensePlate}_${VIN}`);
+      formdata.append("file", file);
+      const { data: licenseResponse } = await API.post(
+        "/boughtcar/license",
+        formdata,
+        {
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+          },
+        }
+      );
+      console.log(licenseResponse);
       const role =
         sellerPassportID === previousOwnerPassportID ? "owner" : "seller";
       const carBody = {
@@ -61,7 +77,11 @@ export default function BoughtCarPage(props) {
         ownershipDate,
         ownerID: state.user._id,
       };
-      const { data } = await API.post("/boughtcar", carBody);
+      const { data } = await API.post("/boughtcar", carBody, {
+        headers: {
+          Authorization: `Bearer ${state.token}`,
+        },
+      });
       let sellerBody = null;
       let sellerReq = null;
       const ownerBody = {
@@ -93,6 +113,7 @@ export default function BoughtCarPage(props) {
       console.error(error);
     }
   };
+
   return (
     <CurrentPage theme={theme}>
       <Form onSubmit={submitForm} onReset={clearInputs}>
@@ -197,13 +218,21 @@ export default function BoughtCarPage(props) {
               />
             </FormControl>
             <FormControl>
-              <label htmlFor="owner">Owner Passport ID</label>
+              <label htmlFor="license">Car License:</label>
               <input
                 type="text"
                 name="owner"
                 id="owner"
                 value={state.user.passportID}
                 disabled
+                hidden
+              />
+              <input
+                type="file"
+                name="license"
+                id="license"
+                accept=".pdf"
+                onChange={changeFile}
               />
             </FormControl>
           </div>

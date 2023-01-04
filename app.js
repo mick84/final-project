@@ -5,22 +5,16 @@ import { connect } from "mongoose";
 import indexRoute from "./routes/indexRoute.js";
 import { fileURLToPath } from "url";
 import path from "path";
-//import cookieParser from "cookie-parser";
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 //const __dirname = fileURLToPath(new URL("./", import.meta.url));
 //const publicpath = path.join(__dirname, "public");
-
 const app = express();
 app.use(cors());
-// Use cookie-parser to parse the JWT from the cookie
-//
 app.use(express.json());
-
 //app.use(express.static(publicpath));
 app.use("/api", indexRoute);
-
 //app.get("*", (_, res) => res.sendFile(path.resolve(publicpath, "index.html")));
 connect(process.env.MONGO_URL, {
   useNewUrlParser: true,

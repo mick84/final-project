@@ -1,10 +1,18 @@
 import { useTheme } from "@emotion/react";
 import styled from "@emotion/styled";
+import { useEffect } from "react";
+//import { useEffect } from "react";
 import { Page } from "../common/layout";
+import { useAuth } from "../context/AuthContext";
+//import API from "../api";
+
 const HomePage = styled(Page)``;
 export default function Home(props) {
   const theme = useTheme();
-
+  const { state } = useAuth();
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
   return (
     <HomePage theme={theme}>
       <div className="page-title">

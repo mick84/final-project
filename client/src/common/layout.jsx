@@ -81,6 +81,7 @@ export const FormButtons = styled.div`
   justify-content: center;
 `;
 export const Navbar = styled.nav`
+  user-select: none;
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -92,7 +93,13 @@ export const Navbar = styled.nav`
   a {
     color: ${palette.steelTeal};
   }
-
+  .logo {
+    font-size: 2rem;
+    color: ${palette.prussianBlue};
+    font-style: italic;
+    padding: 0 2rem;
+    border-right: 2px solid;
+  }
   @media screen and (max-width: 600px) {
     flex-direction: column;
     .logo {

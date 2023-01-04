@@ -13,6 +13,7 @@ import { ThemeProvider } from "@emotion/react";
 import { ThemeToggler, useMyTheme, themes } from "./components/ThemeToggler";
 import { AUTHACTIONS, useAuth } from "./context/AuthContext";
 import { Protected } from "./common/ProtectedElement";
+import { Feedbacks } from "./pages/Feedbacks";
 function App() {
   const [theme, setTheme] = useMyTheme();
   const { state, dispatch } = useAuth();
@@ -24,9 +25,9 @@ function App() {
           <li>
             <NavLink to="/">Home</NavLink>
           </li>
-          <li>
+          {/* <li>
             <NavLink to="/about">About</NavLink>
-          </li>
+          </li> */}
           <li>
             <NavLink to="feedbacks">Feedbacks</NavLink>
           </li>
@@ -73,6 +74,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/feedbacks" element={<Feedbacks />} />
           <Route
             path="/check-seller"
             element={

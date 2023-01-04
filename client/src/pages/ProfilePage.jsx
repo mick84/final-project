@@ -1,18 +1,19 @@
 import {
-  FormControl,
-  FormLayout,
+  // FormControl,
+  // FormLayout,
   Page,
-  FormButtons,
-  Button,
+  // FormButtons,
+  //// Button,
   Card,
 } from "../common/layout";
 import { palette } from "../common/palette";
 import { useTheme } from "@emotion/react";
 import styled from "@emotion/styled";
-import { useState } from "react";
-import API from "../api";
+//import { useState, useEffect } from "react";
+//import API from "../api";
 import { useAuth } from "../context/AuthContext";
-
+import defaultPic from "../common/defaultprofilepic.png";
+//import { ImageUrlFromBuffer } from "../utils/bufferToFile";
 const Profile = styled(Page)`
   flex-direction: row;
   flex-wrap: wrap;
@@ -33,6 +34,7 @@ const FileControl = styled(FormControl)`
   &:before {
   }
 `;*/
+
 const ProfileCard = styled(Card)`
   display: flex;
   flex-direction: column;
@@ -43,6 +45,18 @@ const ProfileCard = styled(Card)`
   font-weight: bold;
   letter-spacing: 0.1rem;
   user-select: none;
+  .top {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .avatar {
+      background-image: url(${defaultPic});
+      background-size: cover;
+      background-position: center;
+      height: 8rem;
+      width: 6rem;
+    }
+  }
   .field {
     display: flex;
     justify-content: space-between;
@@ -50,44 +64,63 @@ const ProfileCard = styled(Card)`
 `;
 export const ProfilePage = () => {
   const theme = useTheme();
-  const {
-    state: { user, token },
-  } = useAuth();
-  console.log(user);
-  const [avatar, setAvatar] = useState(null);
-  const onChangeFile = (e) => setAvatar(() => e.target.files[0]);
+  const { state } = useAuth();
+  /*
+  const [file, setFile] = useState(null);
+  const [profilePicUrl, setProfilePicUrl] = useState(defaultPic);
+  
+  useEffect(() => {
+    //fetch avatar from storage
+    console.log("State:", state);
+    const imgUrl = localStorage.getItem("avatar");
+    //not set, if user didn't choose it before
+    if (!imgUrl) return;
+
+    setProfilePicUrl(() => imgUrl);
+  }, [state]);
+  const onChangeFile = (e) => {
+    const buffer = e.target.files[0];
+    setFile(() => buffer);
+    localStorage.setItem("avatar", ImageUrlFromBuffer(buffer));
+  };
+  
   const SubmitAvatar = async (e) => {
     try {
       e.preventDefault();
       const formdata = new FormData();
-      formdata.append("avatar", avatar);
-      const data = await API.patch("/user/add-avatar", formdata, {
+      formdata.append("avatar", file, "avatar");
+      await API.patch("/user/avatar", formdata, {
         headers: {
-          Authorization: `Bearer ${token}`,
-          //"Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${state.token}`,
         },
       });
-      console.log(data);
+      const imgUrl = ImageUrlFromBuffer(file);
+      setFile(() => null);
+      localStorage.setItem("avatar", imgUrl);
+      setProfilePicUrl(imgUrl);
+      dispatch({ type: AUTHACTIONS.SETAVATAR, payload: imgUrl });
     } catch (error) {
       console.log(error);
     }
   };
+  */
   return (
     <Profile theme={theme}>
       <ProfileCard>
-        <h2 className="username">{user.nickname}</h2>
+        <div className="top">
+          <h2 className="username">{state.user.nickname}</h2>
+
+          <div className="avatar" />
+        </div>
         <hr />
         <p className="passport-id field">
-          <span>passport ID:</span> <span>{user.passportID}</span>
+          <span>passport ID:</span> <span>{state.user.passportID}</span>
         </p>
         <p className="email field">
-          <span>E-mail:</span> <span>{user.email}</span>
+          <span>E-mail:</span> <span>{state.user.email}</span>
         </p>
-        <div className="avatar">{"avatar"}</div>
-        <FormLayout
-          onSubmit={SubmitAvatar}
-          onReset={setAvatar.bind(null, null)}
-        >
+
+        {/* <FormLayout onSubmit={SubmitAvatar} onReset={setFile.bind(null, null)}>
           <FormControl>
             <label htmlFor="avatar">Click to upload avatar</label>
             <input
@@ -101,7 +134,7 @@ export const ProfilePage = () => {
             <Button type="reset">Clear</Button>
             <Button type="submit">Submit</Button>
           </FormButtons>
-        </FormLayout>
+        </FormLayout> */}
       </ProfileCard>
     </Profile>
   );

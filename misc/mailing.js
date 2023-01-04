@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 const mailOptions = (email, nickname, password) => ({
-  from: "CUDE - car undercover dealer exposure",
+  from: process.env.MY_GMAIL_ACCOUNT,
   to: email,
   subject: "Welcome to CUDE!",
   html: `<div><h1>Welcome to CUDE!</h1><h3>Your user name: ${nickname}</h3><h3>Your password:${password}</h3></div>`,

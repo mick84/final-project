@@ -1,8 +1,7 @@
 import { useTheme } from "@emotion/react";
 import styled from "@emotion/styled";
 import { useState } from "react";
-import { FormLayout, Page } from "../common/layout";
-
+import { FormControl, FormLayout, Page } from "../common/layout";
 import { changeInput } from "../utils";
 import { Button } from "../common/layout";
 import { FormButtons } from "../common/layout";
@@ -31,7 +30,6 @@ const CheckPage = styled(Page)`
     }
   }
 `;
-
 export default function CheckSellerPage(props) {
   const theme = useTheme();
   const initialInputs = {
@@ -63,7 +61,7 @@ export default function CheckSellerPage(props) {
           <p className="note"> </p>
           <FormLayout onSubmit={findSeller}>
             <p className="title">Fill here:</p>
-            <div className="form-control">
+            <FormControl>
               <label htmlFor="passportID">Person passport ID</label>
               <input
                 type="text"
@@ -76,8 +74,8 @@ export default function CheckSellerPage(props) {
                 onChange={handleInputChange}
                 required
               />
-            </div>
-            <div className="form-control">
+            </FormControl>
+            <FormControl>
               <label htmlFor="phoneNumber">Person phone number</label>
               <input
                 type="text"
@@ -90,14 +88,13 @@ export default function CheckSellerPage(props) {
                 onChange={handleInputChange}
                 required
               />
-            </div>
+            </FormControl>
             <FormButtons>
               <Button type="reset">Clear</Button>
               <Button type="submit">Submit</Button>
             </FormButtons>
           </FormLayout>
         </div>
-
         <div className="service">
           <p className="name">
             Find specific car's ownership records by its license plate or VIN

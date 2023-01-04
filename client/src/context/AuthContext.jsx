@@ -6,21 +6,23 @@ export const AUTHACTIONS = {
   LOGIN: "login",
   REGISTER: "register",
   LOGOUT: "logout",
+  SETAVATAR: "change avatar",
 };
-export const authReducer = (state, action) => {
+const authReducer = (state, action) => {
   switch (action.type) {
     case AUTHACTIONS.LOGIN:
       return action.payload;
     case AUTHACTIONS.REGISTER:
       return action.payload;
+    case AUTHACTIONS.SETAVATAR:
+      return { ...state, avatar: action.payload };
     case AUTHACTIONS.LOGOUT:
-      const data = {
+      localStorage.clear();
+      return {
         user: null,
         token: null,
+        avatar: null,
       };
-      localStorage.setItem("user", null);
-      localStorage.setItem("token", null);
-      return data;
     default:
       console.log("default");
       return state;
@@ -34,10 +36,13 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const userStr = localStorage.getItem("user");
     const tokenStr = localStorage.getItem("token");
-
     if (userStr && tokenStr) {
       const [user, token] = [userStr, tokenStr].map(JSON.parse);
-      dispatch({ type: AUTHACTIONS.LOGIN, payload: { user, token } });
+
+      dispatch({
+        type: AUTHACTIONS.LOGIN,
+        payload: { user, token },
+      });
     }
   }, []);
   return (

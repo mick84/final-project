@@ -60,6 +60,6 @@ sellerRouter.post("/find_one", async (req, res) => {
     };
     res.status(200).json(result);
   } catch (error) {
-    res.json({ error: error.message });
+    res.status(503).json({ error: error.message });
   }
 });
