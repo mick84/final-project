@@ -23,18 +23,18 @@ You will see all the record dates. If the seller is private person, who honestly
 - car license with your data filled, for later verification
   **Your ID will be added to the form data automatically**
 
-#### Conditions:
-
-_must think about it_
+## _below:the real case scenario. APP now works only with signup mailing_
 
 After sending this form, provided document will be verified versus official government API. If it passes verification, your record will be successfully added to our data base
 Otherwise, **your user profile data will be added to the blacklist, and your account will be deleted**  
  In any case, you will get a proper email message with all needed data provided
 
+---
+
 ## Pages:
 
 - Home
-- About
+
 - log in
 - sign up
 - look for seller: authentication needed

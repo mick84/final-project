@@ -26,29 +26,26 @@ sellerRouter.post("/", async (req, res) => {
         soldCars: [{ carID, role, saleDate }],
       });
     }
-    res.status(201).send(`seller record added successfully`);
+    res.status(201).send(`Record added successfully`);
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: error.message });
   }
 });
-sellerRouter.post("/find_one", async (req, res) => {
+sellerRouter.get("/:passportID", async (req, res) => {
   //* get specific seller info: logged(authorized) mode only!
   try {
-    const { passportID, phoneNumber } = req.body;
-    const seller = await Seller.findOne({
-      $or: [{ passportID }, { phoneNumbers: { $in: [phoneNumber] } }],
+    const { passportID}= req.params;
+    const seller = await Seller.findOne(
+     { passportID 
     })?.populate("soldCars.carID");
     if (!seller) {
-      return res
-        .status(404)
-        .send(
-          `The person with passport ID ${passportID} or with phone number ${phoneNumber} does not exist in our sellers database.`
-        );
+      throw new Error(
+        `The person with passport ID ${passportID} or with phone number ${phoneNumber} does not exist in our sellers database.`
+      );
     }
     const result = {
       passportID: seller.passportID,
-      phoneNumbers: seller.phoneNumbers,
       soldCars: seller.soldCars
         .map((rec) => ({
           brand: rec.carID.brand,
@@ -58,8 +55,9 @@ sellerRouter.post("/find_one", async (req, res) => {
         }))
         .sort((a, b) => b.saleDate - a.saleDate),
     };
+    console.log(result);
     res.status(200).json(result);
   } catch (error) {
-    res.status(503).json({ error: error.message });
+    res.status(400).json({ error: error.message });
   }
 });

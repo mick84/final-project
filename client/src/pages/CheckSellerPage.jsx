@@ -5,6 +5,7 @@ import { FormControl, FormLayout, Page } from "../common/layout";
 import { changeInput } from "../utils";
 import { Button } from "../common/layout";
 import { FormButtons } from "../common/layout";
+import API from "../api";
 const CheckPage = styled(Page)`
   .services-list {
     display: flex;
@@ -27,11 +28,18 @@ const CheckPage = styled(Page)`
     }
     form {
       max-width: 400px;
+      margin: auto;
     }
+  }
+  .results {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 `;
 export default function CheckSellerPage(props) {
   const theme = useTheme();
+  const [results, setResults] = useState(null);
   const initialInputs = {
     passportID: "",
     phoneNumber: "",
@@ -45,9 +53,13 @@ export default function CheckSellerPage(props) {
   const findSeller = async (e) => {
     try {
       e.preventDefault();
-      //const { passportID, phoneNumber } = inputs;
+      const { passportID } = inputs;
+      const { data } = await API.get(`/seller/${passportID}`);
+
+      setResults(() => data);
+      console.log(results);
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.error);
     }
   };
   return (
@@ -75,32 +87,23 @@ export default function CheckSellerPage(props) {
                 required
               />
             </FormControl>
-            <FormControl>
-              <label htmlFor="phoneNumber">Person phone number</label>
-              <input
-                type="text"
-                name="phoneNumber"
-                id="phoneNumber"
-                placeholder="9-10 digits only"
-                pattern="[0-9]{9,10}"
-                title="9 digits for home, 10 for mobile"
-                value={inputs.phoneNumber}
-                onChange={handleInputChange}
-                required
-              />
-            </FormControl>
             <FormButtons>
               <Button type="reset">Clear</Button>
               <Button type="submit">Submit</Button>
             </FormButtons>
           </FormLayout>
         </div>
-        <div className="service">
+        {/* <div className="service">
           <p className="name">
             Find specific car's ownership records by its license plate or VIN
             number
           </p>
           <p className="note"> </p>
+        </div> */}
+        <div className="results">
+          {results?.soldCars.map((car, index) => (
+            <div className="result" key={index + car.saleDate}></div>
+          ))}
         </div>
       </div>
     </CheckPage>

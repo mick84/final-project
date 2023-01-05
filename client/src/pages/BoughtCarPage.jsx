@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import { changeInput } from "../utils";
 import API from "../api";
 import { FormButtons } from "../common/layout";
+import { Loader } from "../components/Loader";
 const CurrentPage = styled(Page)``;
 const Form = styled(FormLayout)`
   & .info {
@@ -21,6 +22,10 @@ const Form = styled(FormLayout)`
 export default function BoughtCarPage(props) {
   const theme = useTheme();
   const { state } = useAuth();
+  const [reqState, setReqState] = useState({
+    loading: false,
+    error: null,
+  });
   const initialInputs = {
     sellerPassportID: "",
     sellerPhone: "",
@@ -35,14 +40,15 @@ export default function BoughtCarPage(props) {
   const [inputs, setInputs] = useState(initialInputs);
   const handleInputChange = ({ target }) => {
     changeInput(target, setInputs);
+    reqState.error && setReqState((st) => ({ ...st, error: null }));
   };
   const clearInputs = () => setInputs(() => initialInputs);
-  const [file, setFile] = useState(null);
-  const changeFile = (e) => setFile(e.target.files[0]);
+  //const [file, setFile] = useState(null);
+  //const changeFile = (e) => setFile(e.target.files[0]);
   const submitForm = async (e) => {
     try {
       e.preventDefault();
-
+      setReqState((st) => ({ ...st, loading: true }));
       const {
         sellerPassportID,
         sellerPhone,
@@ -54,6 +60,7 @@ export default function BoughtCarPage(props) {
         licensePlate,
         ownershipDate,
       } = inputs;
+      /*
       const formdata = new FormData();
       formdata.append("name", `${licensePlate}_${VIN}`);
       formdata.append("file", file);
@@ -67,6 +74,7 @@ export default function BoughtCarPage(props) {
         }
       );
       console.log(licenseResponse);
+      */
       const role =
         sellerPassportID === previousOwnerPassportID ? "owner" : "seller";
       const carBody = {
@@ -101,21 +109,27 @@ export default function BoughtCarPage(props) {
         };
         sellerReq = API.post("/seller", sellerBody);
       }
+
       const ownerReq = API.post("/seller", ownerBody);
       const requests = [ownerReq];
       sellerReq && requests.push(sellerReq);
       const responses = (await Promise.allSettled(requests)).map(
-        (res) => res.data
+        (r) => r.value.data
       );
       console.log(`Owner response: `, responses[0]);
       responses.length === 2 && console.log(`Seller response: `, responses[1]);
     } catch (error) {
-      console.error(error);
+      setReqState((st) => ({ ...st, error }));
+      console.dir(error);
+    } finally {
+      clearInputs();
+      setReqState((st) => ({ ...st, loading: false }));
     }
   };
 
   return (
     <CurrentPage theme={theme}>
+      {reqState.loading && <Loader />}
       <Form onSubmit={submitForm} onReset={clearInputs}>
         <div className="title">Info: Please fill carefully</div>
         <hr />
@@ -218,22 +232,22 @@ export default function BoughtCarPage(props) {
               />
             </FormControl>
             <FormControl>
-              <label htmlFor="license">Car License:</label>
+              <label htmlFor="license">Your ID: (can not change)</label>
               <input
                 type="text"
                 name="owner"
                 id="owner"
                 value={state.user.passportID}
                 disabled
-                hidden
               />
-              <input
+              {/* <input
                 type="file"
                 name="license"
                 id="license"
                 accept=".pdf"
                 onChange={changeFile}
-              />
+                hidden
+              /> */}
             </FormControl>
           </div>
         </div>

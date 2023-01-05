@@ -35,7 +35,8 @@ export const FormControl = styled.div`
   flex-direction: column;
   gap: 0.5rem;
   padding: 0.5rem;
-  border: 1px solid white;
+  //border: 1px solid white;
+  border-radius: 0.5rem;
   & * {
     color: white;
   }
@@ -79,6 +80,9 @@ export const FormButtons = styled.div`
   display: flex;
   gap: 2rem;
   justify-content: center;
+`;
+export const Filler = styled.div`
+  height: 100%;
 `;
 export const Navbar = styled.nav`
   user-select: none;

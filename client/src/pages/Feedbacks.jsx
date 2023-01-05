@@ -171,7 +171,7 @@ export const Feedbacks = () => {
           <FormButtons>
             <Button type="reset">Clear</Button>
 
-            <Button type="submit" disabled={!content}>
+            <Button type="submit" disabled={!content.trim()}>
               Send feedback
             </Button>
           </FormButtons>

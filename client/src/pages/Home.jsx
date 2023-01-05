@@ -2,11 +2,29 @@ import { useTheme } from "@emotion/react";
 import styled from "@emotion/styled";
 import { useEffect } from "react";
 //import { useEffect } from "react";
-import { Page } from "../common/layout";
+import { Filler, Page } from "../common/layout";
 import { useAuth } from "../context/AuthContext";
 //import API from "../api";
 
-const HomePage = styled(Page)``;
+const HomePage = styled(Page)`
+  section {
+    .intro {
+      max-width: 1000px;
+      font-size: 1.2rem;
+    }
+    .service-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      padding: 1rem;
+      .service {
+        color: gray;
+
+        font-size: 1.5rem;
+      }
+    }
+  }
+`;
 export default function Home(props) {
   const theme = useTheme();
   const { state } = useAuth();
@@ -18,30 +36,32 @@ export default function Home(props) {
       <div className="page-title">
         CUDE - Car Undercover Dealer Exposure site
       </div>
-      <h3>Dear guest,welcome to our site!</h3>
 
       <div>
         <section>
-          <p>
-            If you are going to purchase an used car, you did the right thing,
-            coming here! The main goal of the site is to provide you the most
-            accurate information about the car seller, with whom you want to
-            make a deal.
-          </p>
-          <h3>Our services:</h3>
-          <ul className="service-list">
+          <h2>Our services:</h2>
+          <ol className="service-list">
             <li className="service">
-              Find the information about past and current car deal activity of
-              specific person
+              Find the information about past car sale activity of specific
+              person
             </li>
+
             <li className="service">
               Already bought car? Good to know! Now, help others to avoid
               frauds, make a car deal record!
             </li>
+
+            <hr />
+
             <li className="service">
-              Read and tell others about deceiving dealer's techniques
+              * Find the information about current car sale activity of specific
+              person (to be added)
             </li>
-          </ul>
+            <li className="service">
+              * Read and tell others about deceiving dealer's techniques (to be
+              added)
+            </li>
+          </ol>
         </section>
         <aside>
           <blockquote>
@@ -55,6 +75,7 @@ export default function Home(props) {
           </blockquote>
         </aside>
       </div>
+      <Filler />
     </HomePage>
   );
 }

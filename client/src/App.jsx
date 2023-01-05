@@ -31,16 +31,16 @@ function App() {
           <li>
             <NavLink to="feedbacks">Feedbacks</NavLink>
           </li>
-          <li>
+          {/* <li>
             <NavLink to="/contacts">Contacts</NavLink>
+          </li> */}
+          <li>
+            <NavLink to="/services">Services</NavLink>
           </li>
           {state.user && (
             <>
               <li>
                 <NavLink to="/bought-car">Bought&nbsp;a&nbsp;Car</NavLink>
-              </li>
-              <li>
-                <NavLink to="/check-seller">Check&nbsp;the&nbsp;Seller</NavLink>
               </li>
             </>
           )}
@@ -75,14 +75,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/feedbacks" element={<Feedbacks />} />
-          <Route
-            path="/check-seller"
-            element={
-              <Protected user={state.user}>
-                <CheckSellerPage />
-              </Protected>
-            }
-          />
+          <Route path="/services" element={<CheckSellerPage />} />
           <Route
             path="/bought-car"
             element={
