@@ -1,21 +1,23 @@
 import {
-  // FormControl,
-  // FormLayout,
+  FormControl,
+  FormLayout,
   Page,
-  // FormButtons,
-  //// Button,
+  FormButtons,
+  Button,
   Card,
 } from "../common/layout";
 import { palette } from "../common/palette";
 import { useTheme } from "@emotion/react";
 import styled from "@emotion/styled";
-//import { useState, useEffect } from "react";
-//import API from "../api";
+import { useState, useEffect } from "react";
+import API from "../api";
 import { useAuth } from "../context/AuthContext";
 import defaultPic from "../common/defaultprofilepic.png";
 //import { ImageUrlFromBuffer } from "../utils/bufferToFile";
 const Profile = styled(Page)`
   flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
   flex-wrap: wrap;
 `;
 /*
@@ -65,10 +67,10 @@ const ProfileCard = styled(Card)`
 export const ProfilePage = () => {
   const theme = useTheme();
   const { state } = useAuth();
-  /*
+
   const [file, setFile] = useState(null);
-  const [profilePicUrl, setProfilePicUrl] = useState(defaultPic);
-  
+  //const [profilePicUrl, setProfilePicUrl] = useState(defaultPic);
+  /*
   useEffect(() => {
     //fetch avatar from storage
     console.log("State:", state);
@@ -78,32 +80,29 @@ export const ProfilePage = () => {
 
     setProfilePicUrl(() => imgUrl);
   }, [state]);
+  */
   const onChangeFile = (e) => {
     const buffer = e.target.files[0];
     setFile(() => buffer);
-    localStorage.setItem("avatar", ImageUrlFromBuffer(buffer));
   };
-  
+
   const SubmitAvatar = async (e) => {
     try {
       e.preventDefault();
       const formdata = new FormData();
-      formdata.append("avatar", file, "avatar");
-      await API.patch("/user/avatar", formdata, {
+      formdata.append("avatar", file);
+      const { data } = await API.patch("/user/avatar", formdata, {
         headers: {
           Authorization: `Bearer ${state.token}`,
         },
       });
-      const imgUrl = ImageUrlFromBuffer(file);
+      console.log(data);
       setFile(() => null);
-      localStorage.setItem("avatar", imgUrl);
-      setProfilePicUrl(imgUrl);
-      dispatch({ type: AUTHACTIONS.SETAVATAR, payload: imgUrl });
     } catch (error) {
       console.log(error);
     }
   };
-  */
+
   return (
     <Profile theme={theme}>
       <ProfileCard>
@@ -120,7 +119,7 @@ export const ProfilePage = () => {
           <span>E-mail:</span> <span>{state.user.email}</span>
         </p>
 
-        {/* <FormLayout onSubmit={SubmitAvatar} onReset={setFile.bind(null, null)}>
+        <FormLayout onSubmit={SubmitAvatar} onReset={setFile.bind(null, null)}>
           <FormControl>
             <label htmlFor="avatar">Click to upload avatar</label>
             <input
@@ -134,7 +133,7 @@ export const ProfilePage = () => {
             <Button type="reset">Clear</Button>
             <Button type="submit">Submit</Button>
           </FormButtons>
-        </FormLayout> */}
+        </FormLayout>
       </ProfileCard>
     </Profile>
   );

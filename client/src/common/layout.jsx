@@ -134,14 +134,14 @@ export const Navbar = styled.nav`
 `;
 export const Page = styled.div`
   display: flex;
-  justify-content: center;
+  //justify-content: center;
   flex-direction: column;
   gap: 1rem;
   padding: 1rem;
   align-items: center;
   background-color: ${(props) => props.theme.backgroundColor};
   color: ${(props) => props.theme.color};
-  //min-height: 100%;
+  min-height: 92vh;
   //height: max-content;
   background-attachment: fixed;
   .page-title {
